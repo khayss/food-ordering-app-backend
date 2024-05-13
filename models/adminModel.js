@@ -18,10 +18,15 @@ const adminSchema = new mongoose.Schema(
     },
     tel: {
       type: String,
+      required: true,
+      unique: true,
     },
     password: {
       type: String,
       required: true,
+    },
+    profilePicture: {
+      type: String,
     },
   },
   { timestamps: true }
