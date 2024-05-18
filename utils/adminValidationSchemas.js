@@ -54,3 +54,23 @@ export const adminSignupSchema = z.object({
       "Invalid phone number: phone number must be a valid phone number with 10 digits excluding the first zero(0)"
     ),
 });
+
+// Zod schma to validate admin login
+export const adminLoginSchema = z.object({
+  email: z
+    .string({ required_error: "Required field: email field cannot be null" })
+    .trim()
+    .toLowerCase()
+    .email({ message: "Invalid email: email field must contain a valid email" })
+    .max(255),
+  password: z
+    .string({
+      required_error: "Required field: password field is cannot be null",
+    })
+    .trim()
+    .min(8, "Password too short: password must have minimum of 1 character")
+    .max(
+      255,
+      "Max length exceeded: max length for password field is 255 characters"
+    ),
+});
