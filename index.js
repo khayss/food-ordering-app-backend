@@ -5,20 +5,33 @@ import { apiPrefixes, port } from "./config/config.js";
 import { connectDB } from "./database/db.js";
 import { adminRouter } from "./routes/adminRoutes.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { riderRouter } from "./routes/riderRoutes.js";
+import { userRouter } from "./routes/userRoutes.js";
+import { generalRouter } from "./routes/generalRoutes.js";
 
 /* Initial express application */
 const app = express();
 
 /* Middlewares */
-app.use(morgan("dev")); // Logging requests and response
-app.use(express.json()); // Parse incoming requests with JSON payload
-app.use(express.urlencoded({ extended: true })); // Parses incoming requests with urlencoded payloads
+app
+  .use(morgan("dev")) // Logging requests and response
+  .use(express.json()) // Parse incoming requests with JSON payload
+  .use(express.urlencoded({ extended: true })) // Parses incoming requests with urlencoded payloads
 
-/* Router for admin routes */
-app.use(apiPrefixes.adminApi, adminRouter);
+  /* Router for admin routes */
+  .use(apiPrefixes.generalApi, generalRouter)
+  .use(apiPrefixes.adminApi, adminRouter)
+  .use(apiPrefixes.riderApi, riderRouter)
+  .use(apiPrefixes.userApi, userRouter)
+  .use("*", (req, res) =>
+    res.status(404).json({
+      status: "error",
+      message: "route not found",
+    })
+  )
 
-/* Error handler middlewares */
-app.use(errorHandler);
+  /* Error handler middlewares */
+  .use(errorHandler);
 
 /* Connect to database and Listen for requests using an IIFE*/
 (async function () {

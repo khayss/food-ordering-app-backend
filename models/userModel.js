@@ -23,13 +23,19 @@ const userSchema = new mongoose.Schema(
     },
     address: {
       type: String,
+      required: true,
     },
     tel: {
       type: String,
+      required: true,
+      unique: true,
     },
     password: {
       type: String,
       required: true,
+    },
+    profilePhoto: {
+      type: String,
     },
   },
   { timestamps: true }

@@ -11,6 +11,11 @@ const deliverySchema = new mongoose.Schema(
       type: String,
       enum: ["PENDING", "DISPATCHED", "DELIVERED", "FAILED"],
     },
+    order: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+      required: true,
+    },
   },
   { timestamps: true }
 );

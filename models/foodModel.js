@@ -26,12 +26,18 @@ const foodSchema = new mongoose.Schema(
       default: 0,
     },
     images: {
-      type: [],
-      required: (value) => value.length > 0,
+      type: [{ type: String, required: true }],
+      required: true,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Admin",
+      required: true,
+    },
+    lastUpdatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      required: true,
     },
   },
   { timestamps: true }

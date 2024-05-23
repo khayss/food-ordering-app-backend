@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 // create order schema
 const orderSchema = new mongoose.Schema(
   {
-    foods: {
-      type: [mongoose.Schema.Types.ObjectId],
+    food: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
       ref: "Food",
     },
+    quantity: { type: Number, required: true },
     orderBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

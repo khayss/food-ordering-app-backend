@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { AppError } from "./error.js";
+
+/* SCHEMAS */
 
 // Zod schema to validate admin signup req body
 export const adminSignupSchema = z.object({
@@ -74,3 +77,39 @@ export const adminLoginSchema = z.object({
       "Max length exceeded: max length for password field is 255 characters"
     ),
 });
+
+/* VALIDATORS */
+
+// sign up req body validator
+export function validateAdminSignupReqBody(data) {
+  const result = adminSignupSchema.safeParse(data);
+  if (result.success) {
+    return result.data;
+  } else {
+    const details = result.error.issues.map((issue) => issue.message);
+    throw new AppError(
+      "1000",
+      400,
+      "ValidationError",
+      "Incomplete or invalid sign up body",
+      details
+    );
+  }
+}
+
+// login req body validator
+export function validateAdminLoginReqBody(data) {
+  const result = adminLoginSchema.safeParse(data);
+  if (result.success) {
+    return result.data;
+  } else {
+    const details = result.error.issues.map((issue) => issue.message);
+    throw new AppError(
+      "1001",
+      400,
+      "ValidationError",
+      "Incomplete or invalid login body",
+      details
+    );
+  }
+}

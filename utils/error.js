@@ -1,4 +1,4 @@
-export class AdminError extends Error {
+export class AppError extends Error {
   constructor(errorCode, responseCode, type, message, details) {
     super(message);
     this.errorCode = errorCode;
