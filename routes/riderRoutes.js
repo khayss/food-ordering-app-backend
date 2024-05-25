@@ -21,7 +21,7 @@ riderRouter
   .get("/get-rider", getRider)
   .get("/get-all-deliveries", getAllDeliveries)
   .get("/get-delivery/:id", getDelivery)
-  .post("/pickup-delivery", pickUpDelivery)
-  .post("/confirm-delivery", confirmDelivery)
-  .post("/update-availability", updateAvailability)
-  .post("/report-delivery-failure", reportDeliveryFailure);
+  .post("/pickup-delivery/:deliveryId", pickUpDelivery)
+  .post("/confirm-delivery/:deliveryId", confirmDelivery)
+  .post("/update-availability/:status", updateAvailability)
+  .post("/report-delivery-failure/:deliveryId", reportDeliveryFailure);

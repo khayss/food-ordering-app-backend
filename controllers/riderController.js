@@ -10,6 +10,7 @@ import {
   riderSignUpSchema,
   validateRiderReqBody,
 } from "../utils/riderValidations.js";
+import { DeliveryModel } from "../models/deliveryModel.js";
 
 export const signupRider = catchErrorFunc(async (req, res) => {
   const { address, email, firstname, lastname, password, tel } =
@@ -123,18 +124,154 @@ export const loginRider = catchErrorFunc(async (req, res) => {
   );
 });
 
-export const getRider = catchErrorFunc(async (req, res) => {});
+export const getRider = catchErrorFunc(async (req, res) => {
+  const { id } = req.verifiedRider;
 
-export const getAllDeliveries = catchErrorFunc(async (req, res) => {});
+  const rider = await RiderModel.findById(id, { approvedBy: 0, password: 0 });
 
-export const getDelivery = catchErrorFunc(async (req, res) => {});
+  res.status(200).json({
+    success: true,
+    data: {
+      rider: rider.toJSON(),
+    },
+  });
+});
 
-export const updateAvailability = catchErrorFunc(async (req, res) => {});
+export const getAllDeliveries = catchErrorFunc(async (req, res) => {
+  const deliveries = await DeliveryModel.find({}, {}, { limit: 20 });
 
-export const pickUpDelivery = catchErrorFunc(async (req, res) => {});
+  res.status(200).json({ success: true, data: { deliveries } });
+});
 
-export const confirmDelivery = catchErrorFunc(async (req, res) => {});
+export const getDelivery = catchErrorFunc(async (req, res) => {
+  const { id } = req.params;
 
-export const reportDeliveryFailure = catchErrorFunc(async (req, res) => {});
+  const delivery = await DeliveryModel.findById(id);
+
+  res
+    .status(200)
+    .json({ success: true, data: { delivery: delivery.toJSON() } });
+});
+
+export const updateAvailability = catchErrorFunc(async (req, res) => {
+  const { id } = req.verifiedRider;
+  const { status } = req.params;
+
+  const rider = await RiderModel.findById(id);
+
+  if (rider.availability == "BUSY")
+    throw new AppError(
+      "1404",
+      400,
+      "RIDER",
+      "Rider is busy",
+      "Rider is currently busy and cannot update availability"
+    );
+
+  let availability;
+
+  switch (status) {
+    case 0:
+      availability = "UNAVAILABLE";
+    case 1:
+      availability = "AVAILABLE";
+    default:
+      availability = "UNAVAILABLE";
+  }
+  const updatedAvailability = await RiderModel.findByIdAndUpdate(
+    id,
+    {
+      availability,
+    },
+    { new: true }
+  );
+
+  console.log(updatedAvailability);
+
+  res.status(201).json({
+    success: true,
+    data: {
+      message: "rider availabilty updated",
+      availability: updatedAvailability.availability,
+    },
+  });
+});
+
+export const pickUpDelivery = catchErrorFunc(async (req, res) => {
+  const { id } = req.verifiedRider;
+  const { deliveryId } = req.params;
+
+  const rider = await RiderModel.findById(id);
+
+  if (rider.availability != "AVAILABLE")
+    throw new AppError(
+      "1400",
+      400,
+      "RIDER",
+      "Rider is not available",
+      "Rider is not available"
+    );
+  const pickedDelivery = await DeliveryModel.findByIdAndUpdate(
+    deliveryId,
+    {
+      status: "DISPATCHED",
+      rider: id,
+    },
+    { new: true }
+  );
+
+  await RiderModel.findByIdAndUpdate(id, { availability: "BUSY" });
+  console.log(pickedDelivery);
+
+  res.status(201).json({
+    success: true,
+    data: {
+      message: "delivery confirmed",
+      data: {
+        pickedDelivery: pickedDelivery.toJSON(),
+      },
+    },
+  });
+});
+
+export const confirmDelivery = catchErrorFunc(async (req, res) => {
+  const { deliveryId } = req.params;
+  const { id } = req.verifiedRider;
+
+  const confirmedDelivery = await DeliveryModel.findByIdAndUpdate(
+    deliveryId,
+    {
+      status: "DELIVERED",
+    },
+    { new: true }
+  );
+
+  await RiderModel.findByIdAndUpdate(id, { availability: "AVAILABLE" });
+
+  res.status(201).json({
+    success: true,
+    confirmedDelivery: confirmedDelivery.toJSON(),
+  });
+});
+
+export const reportDeliveryFailure = catchErrorFunc(async (req, res) => {
+  const { id } = req.verifiedRider;
+  const { deliveryId } = req.params;
+
+  const confirmedDelivery = await DeliveryModel.findByIdAndUpdate(
+    deliveryId,
+    {
+      status: "FAILED",
+    },
+    { new: true }
+  );
+
+  await RiderModel.findByIdAndUpdate(id, { availability: "AVAILABLE" });
+
+  res.status(201).json({
+    success: true,
+    confirmedDelivery: confirmedDelivery.toJSON(),
+  });
+});
 
 export const ex = catchErrorFunc(async (req, res) => {});
