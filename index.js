@@ -17,7 +17,7 @@ const app = express();
 app
   .use(
     cors({
-      origin: "https://food-app-front-end-sand.vercel.app/",
+      origin: "https://food-app-front-end-sand.vercel.app",
       credentials: true,
     })
   )
