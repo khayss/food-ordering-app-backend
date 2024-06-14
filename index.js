@@ -15,7 +15,12 @@ const app = express();
 
 /* Middlewares */
 app
-  .use(cors({ origin: "http://localhost:3001", credentials: true }))
+  .use(
+    cors({
+      origin: "https://food-app-front-end-sand.vercel.app/",
+      credentials: true,
+    })
+  )
   .use(morgan("dev")) // Logging requests and response
   .use(express.json()) // Parse incoming requests with JSON payload
   .use(express.urlencoded({ extended: true })) // Parses incoming requests with urlencoded payloads
