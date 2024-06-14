@@ -4,3 +4,6 @@ node_modules
 public/uploads/admin/*
 public/uploads/users/*
 public/uploads/food/*
+!public/uploads/food/.gitkeep
+!public/uploads/users/.gitkeep
+!public/uploads/admin/.gitkeep
