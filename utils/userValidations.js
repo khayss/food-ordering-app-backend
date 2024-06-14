@@ -43,7 +43,7 @@ export const userSignupSchema = z.object({
   password: z
     .string({ required_error: "password field is required" })
     .trim()
-    .min(8, { message: "password must be 8 characters or more" })
+    .min(8, { message: "password too short. must be 8 characters or more" })
     .max(100, { message: "password is limitted to 100 characters" }),
   address: z
     .string({ required_error: "'address' field is required for registration" })
@@ -65,7 +65,9 @@ export const userLoginSchema = z.object({
   password: z
     .string({ required_error: "password is required to sign in" })
     .trim()
-    .min(8, { message: "password must be 8 characters or longer" }),
+    .min(8, {
+      message: "password is too short. must be 8 characters or longer",
+    }),
 });
 
 /* VALIDATORS */
@@ -77,13 +79,7 @@ export function validateUserSignupReqBody(data) {
     return result.data;
   } else {
     const details = result.error.issues.map((issue) => issue.message);
-    throw new AppError(
-      "1000",
-      400,
-      "ValidationError",
-      "Incomplete or invalid sign up body",
-      details
-    );
+    throw new AppError("1000", 400, "ValidationError", details[0], details);
   }
 }
 
@@ -94,12 +90,6 @@ export function validateUserLoginReqBody(data) {
     return result.data;
   } else {
     const details = result.error.issues.map((issue) => issue.message);
-    throw new AppError(
-      "1001",
-      400,
-      "ValidationError",
-      "Incomplete or invalid login body",
-      details
-    );
+    throw new AppError("1001", 400, "ValidationError", details[0], details);
   }
 }

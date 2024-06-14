@@ -4,6 +4,7 @@ import {
   createOrder,
   getDeliveryStatus,
   getOrder,
+  getOrders,
   getUser,
   userLoginController,
   userSignupController,
@@ -19,4 +20,5 @@ userRouter
   .get("/get-user", getUser)
   .get("/delivery-status/:id", getDeliveryStatus)
   .get("/get-order", getOrder)
+  .get("/get-orders", getOrders)
   .post("/create-order", createOrder);

@@ -20,8 +20,6 @@ export function errorHandler(error, req, res, next) {
     res.status(error.responseCode).json({
       success,
       message: error.message,
-      type: error.type,
-      details: error.details,
     });
   } else if (error instanceof MulterError) {
     res.status(400).json({ success, message: error.message });

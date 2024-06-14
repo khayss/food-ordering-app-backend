@@ -14,7 +14,7 @@ export const getFoods = catchErrorFunc(async (req, res) => {
 });
 
 export const getFoodById = catchErrorFunc(async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.query;
   const food = await FoodModel.findById(id, { createdBy: 0, lastUpdatedBy: 0 });
   res.status(200).json({ success: true, data: { food } });
 });

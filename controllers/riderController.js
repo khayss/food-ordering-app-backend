@@ -173,10 +173,13 @@ export const updateAvailability = catchErrorFunc(async (req, res) => {
   switch (status) {
     case 0:
       availability = "UNAVAILABLE";
+      break;
     case 1:
       availability = "AVAILABLE";
+      break;
     default:
       availability = "UNAVAILABLE";
+      break;
   }
   const updatedAvailability = await RiderModel.findByIdAndUpdate(
     id,

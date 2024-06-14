@@ -217,11 +217,11 @@ export const getDeliveryStatus = catchErrorFunc(async (req, res) => {
 });
 
 export const getOrder = catchErrorFunc(async (req, res) => {
-  const { id: orderId } = req.params;
+  const { id: orderId } = req.query;
 
   const order = await OrderModel.findById(orderId);
 
-  if (!delivery)
+  if (!order)
     throw new AppError(
       "1204",
       404,
@@ -235,5 +235,30 @@ export const getOrder = catchErrorFunc(async (req, res) => {
     data: {
       order: order.toJSON(),
     },
+  });
+});
+
+export const getOrders = catchErrorFunc(async (req, res) => {
+  const { id } = req.verifiedUser;
+
+  console.log(id);
+
+  const order = await OrderModel.find(
+    { orderBy: id },
+    { rider: 0 },
+    { limit: 10 }
+  ).populate("food");
+  if (order.length < 1)
+    throw new AppError(
+      "1204",
+      404,
+      "This user hasn't made any other yet",
+      "No orders found"
+    );
+
+  res.status(200).json({
+    success: true,
+    message: "user orders successfully retrieved",
+    data: order,
   });
 });

@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
 import { apiPrefixes, port } from "./config/config.js";
 import { connectDB } from "./database/db.js";
 import { adminRouter } from "./routes/adminRoutes.js";
@@ -14,15 +15,17 @@ const app = express();
 
 /* Middlewares */
 app
+  .use(cors({ origin: "http://localhost:3001", credentials: true }))
   .use(morgan("dev")) // Logging requests and response
   .use(express.json()) // Parse incoming requests with JSON payload
   .use(express.urlencoded({ extended: true })) // Parses incoming requests with urlencoded payloads
+  .use("/images", express.static("public"))
 
   /* Router for admin routes */
   .use(apiPrefixes.generalApi, generalRouter)
-  .use(apiPrefixes.adminApi, adminRouter)
-  .use(apiPrefixes.riderApi, riderRouter)
   .use(apiPrefixes.userApi, userRouter)
+  .use(apiPrefixes.riderApi, riderRouter)
+  .use(apiPrefixes.adminApi, adminRouter)
   .use("*", (req, res) =>
     res.status(404).json({
       status: "error",

@@ -14,9 +14,10 @@ export const jwtSecret = process.env.JWT_SECRET;
 export const jwtExpiration = 24 * 60 * 60;
 
 // API prefixes
+export const apiPrefix = "/api/v1/";
 export const apiPrefixes = {
-  generalApi: "/api/v1",
-  adminApi: "/api/v2",
-  userApi: "/api/v3",
-  riderApi: "/api/v4",
+  generalApi: apiPrefix + "app",
+  adminApi: apiPrefix + "admin",
+  userApi: apiPrefix + "user",
+  riderApi: apiPrefix + "rider",
 };
