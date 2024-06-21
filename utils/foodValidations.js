@@ -55,12 +55,6 @@ export function validateNewFoodReqBody(data) {
     return result.data;
   } else {
     const details = result.error.issues.map((issue) => issue.message);
-    throw new AppError(
-      "1001",
-      400,
-      "ValidationError",
-      "Incomplete or invalid login body",
-      details
-    );
+    throw new AppError("1001", 400, "ValidationError", details[0], details);
   }
 }

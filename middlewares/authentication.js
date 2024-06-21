@@ -14,7 +14,8 @@ export async function verifyAdmin(req, res, next) {
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Cannot verify token. token is invalid or expired",
+      message:
+        "Protected Router. No token is provided, or provided key is invalid or expired",
     });
   }
 }
@@ -31,7 +32,8 @@ export async function verifyRider(req, res, next) {
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Cannot verify token. token is invalid or expired",
+      message:
+        "Protected Router. No token is provided, or provided key is invalid or expired",
     });
   }
 }
@@ -48,7 +50,8 @@ export async function verifyUser(req, res, next) {
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: "Cannot verify token. token is invalid or expired",
+      message:
+        "Protected Router. No token is provided, or provided key is invalid or expired",
     });
   }
 }

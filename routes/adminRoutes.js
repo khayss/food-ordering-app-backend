@@ -6,6 +6,7 @@ import {
   createFood,
   deleteFood,
   getAdmin,
+  getPendingRiders,
 } from "../controllers/adminControllers.js";
 import { adminSignupUpload, createFoodUlpoad } from "../middlewares/multer.js";
 import { verifyAdmin } from "../middlewares/authentication.js";
@@ -26,7 +27,7 @@ adminRouter
   .put("/approve-rider", approveRider)
   .post("/suspend-user")
   .post("/unsuspend-user")
-  .get("/pending-riders")
+  .get("/pending-riders", getPendingRiders)
   .get("/riders")
   .post("/suspend-rider")
   .post("unsuspend-rider");

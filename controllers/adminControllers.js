@@ -135,7 +135,7 @@ export const createFood = catchErrorFunc(async (req, res) => {
   const { name, category, stock, priceInCents, discountPercentage } = req.body;
   const { id } = req.verifiedAdmin;
 
-  if (req.files.length < 1)
+  if (!req.files || req.files.length < 1)
     throw new AppError(
       "1201",
       400,
@@ -156,7 +156,8 @@ export const createFood = catchErrorFunc(async (req, res) => {
     );
   }
 
-  const foodImages = req.files.map((file) => file.path);
+  const foodImages = req.files?.map((file) => file.path);
+  console.log(req.files);
   /* create new food */
   const newFood = await FoodModel.create({
     name,
@@ -169,7 +170,7 @@ export const createFood = catchErrorFunc(async (req, res) => {
     lastUpdatedBy: id,
   });
 
-  res.status(201).json({ success: true, foodDetails: newFood.toJSON() });
+  res.status(201).json({ success: true, data: newFood.toJSON() });
 });
 
 /* DELETE FOOD CONTROLLER */
@@ -265,4 +266,15 @@ export const approveRider = catchErrorFunc(async (req, res) => {
   });
 });
 
-export const ex = catchErrorFunc(async (req, res) => {});
+export const getPendingRiders = catchErrorFunc(async (req, res) => {
+  const page = Math.abs(Number(req.query.page)) || 0;
+  const limit = Math.abs(Number(req.query.limit)) || 20;
+
+  const rider = await RiderModel.find(
+    { status: "PENDING" },
+    { createdBy: 0, lastUpdatedBy: 0 },
+    { limit, skip: page * limit }
+  );
+  res.status(200).json({ success: true, data: { rider, limit, page } });
+});
+// export const ex = catchErrorFunc(async (req, res) => {});

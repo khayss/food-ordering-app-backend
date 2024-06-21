@@ -17,14 +17,15 @@ const app = express();
 app
   .use(
     cors({
-      origin: "https://food-app-front-end-sand.vercel.app",
+      // origin: "https://food-app-front-end-sand.vercel.app",
+      origin: "http://localhost:3000",
       credentials: true,
     })
   )
   .use(morgan("dev")) // Logging requests and response
   .use(express.json()) // Parse incoming requests with JSON payload
   .use(express.urlencoded({ extended: true })) // Parses incoming requests with urlencoded payloads
-  .use("/images", express.static("public"))
+  .use("/images/public", express.static("public"))
 
   /* Router for admin routes */
   .use(apiPrefixes.generalApi, generalRouter)

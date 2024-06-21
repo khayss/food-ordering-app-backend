@@ -5,7 +5,7 @@ import path from "path";
 /* multer storage for admin signup */
 const adminSignupStorage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, "uploads/admin");
+    cb(null, "public/uploads/admin");
   },
   filename: async (req, file, cb) => {
     try {
@@ -52,7 +52,7 @@ export const adminSignupUpload = multer({
 /* Multer storage for new food */
 const createFoodStorage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, "uploads/food");
+    cb(null, "public/uploads/food");
   },
   filename: async (req, file, cb) => {
     try {
@@ -89,11 +89,11 @@ export const createFoodUlpoad = multer({
       );
     }
   },
-}).array("images", 5);
+}).array("images[]", 5);
 
 const userSignupStorage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, "uploads/users");
+    cb(null, "public/uploads/users");
   },
   filename: async (req, file, cb) => {
     try {
